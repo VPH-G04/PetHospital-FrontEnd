@@ -6,7 +6,7 @@
         :data-source="testList.list"
         :loading="loading"
         :pagination="false"
-        style="margin: 10px auto 0;width: 800px"
+        style="margin: 10px auto 0;width: 1000px"
     >
       <template #title>
         <a-button type="primary" @click="onAdd">增加考试</a-button>

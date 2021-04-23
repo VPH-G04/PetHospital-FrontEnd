@@ -20,7 +20,7 @@
       <a-table
           rowKey="id"
           :columns="columns"
-          :data-source="formState.questionList"
+          :data-source="formState.questions"
           style="width: 400px; margin-top: 5px"
           :pagination="false"
       >
@@ -145,7 +145,7 @@ export default defineComponent({
     return {
       columns: [
         {title: '#', dataIndex: 'index', width: '50px', slots: {customRender: 'index'}},
-        {title: 'ID', dataIndex: 'id', width: '50px',},
+        {title: 'ID', dataIndex: 'id', width: '60px',},
         {title: '题名', dataIndex: 'title', width: '240px', slots: {customRender: 'question'}},
         {title: '', dataIndex: 'action', width: '50px', slots: {customRender: 'action'}},
       ],
@@ -187,9 +187,11 @@ export default defineComponent({
     },
     onDelete(index) {
       this.formState.questionList.splice(index, 1);
+      this.formState.questions.splice(index, 1);
     },
     onAdd(index) {
-      this.formState.questionList.push(this.questionList.list[index]);
+      this.formState.questionList.push(this.questionList.list[index].id);
+      this.formState.questions.push(this.questionList.list[index]);
     },
     showDrawer(index) {
       this.question = this.questionList.list[index];
@@ -212,7 +214,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const formRef = ref();
-    const formState = reactive({name: '', score: 100, questionList: [{title: '123题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目题目', id: 1, diseaseId: 1,}]});
+    const formState = reactive({name: '', score: 100, questions: [], questionList: []});
     const rules = {
       name: [{required: true, message: '请输入试卷名称', trigger: 'change'}],
       question: [{
@@ -233,7 +235,7 @@ export default defineComponent({
       formRef.value
           .validate()
           .then(() => {
-            axios.post('/paper/createTestPaper', formState).then(res => {
+            axios.post('/paper/createPaper', formState).then(res => {
               message.success(`创建试卷成功！`);
               router.go(-1);
             });

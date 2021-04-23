@@ -63,6 +63,14 @@ export default defineComponent({
     }
   },
   methods: {
+    getDiseaseList() {
+      this.$axios.post('/disease/getAll').then(res => {
+        this.disease = res;
+      });
+    },
+  },
+  created() {
+    this.getDiseaseList();
   },
   setup() {
     const router = useRouter();

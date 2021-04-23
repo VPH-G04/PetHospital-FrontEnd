@@ -6,9 +6,9 @@
     </a-page-header>
     <br><br>
     <a-row type="flex" justify="space-between">
-      <a-col :span="5" style="margin-left: 50px">
+      <a-col :span="6" style="margin-left: 50px">
         <a-spin :spinning="loading" tip="Loading...">
-          <a-card class="card-border" style="min-width: 200px">
+          <a-card class="card-border" style="min-width: 250px">
             <h2>{{ paper.name }}</h2>
             <a-divider></a-divider>
             <a-descriptions size="small" :column="1">
@@ -25,6 +25,7 @@
             rowKey="id"
             :columns="columns"
             :data-source="paper.questionList"
+            :loading="loading"
             style="width: 700px"
             :pagination="false"
         >
@@ -45,13 +46,13 @@
             </a-popover>
           </template>
 
-          <template #action="{ record }">
-            <span>
-              <a-popconfirm title="确定删除？" @confirm="onDelete(record.id)">
-              <a href="#">删除</a>
-              </a-popconfirm>
-            </span>
-          </template>
+<!--          <template #action="{ record }">-->
+<!--            <span>-->
+<!--              <a-popconfirm title="确定删除？" @confirm="onDelete(record.id)">-->
+<!--              <a href="#">删除</a>-->
+<!--              </a-popconfirm>-->
+<!--            </span>-->
+<!--          </template>-->
 
         </a-table>
       </a-col>
@@ -104,6 +105,7 @@ export default defineComponent({
       }).then(res => {
         this.paper = res;
         this.loading = false;
+        console.log(this.paper.questionList)
       });
     },
     // onDelete(id) {

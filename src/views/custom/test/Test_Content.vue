@@ -20,10 +20,10 @@
 
         </template>
         <a-descriptions size="small" :column="4">
-          <a-descriptions-item label="试卷名称">试卷一</a-descriptions-item>
-          <a-descriptions-item label="考试时长">120分钟</a-descriptions-item>
-          <a-descriptions-item label="开始时间">2021-4-1 12:00</a-descriptions-item>
-          <a-descriptions-item label="结束时间">2021-4-1 14:00</a-descriptions-item>
+          <a-descriptions-item label="试卷名称">{{ test.name }}</a-descriptions-item>
+          <a-descriptions-item label="考试时长">{{ test.duration }}分钟</a-descriptions-item>
+          <a-descriptions-item label="开始时间">{{ test.start }}</a-descriptions-item>
+          <a-descriptions-item label="结束时间">{{ test.end }}</a-descriptions-item>
         </a-descriptions>
       </a-page-header>
 
@@ -142,6 +142,17 @@ export default defineComponent({
       console.log(this.question);
     }
   },
+  beforeRouteLeave(to, form, next) {
+    Modal.confirm({
+      title: '确认离开考试界面？',
+      icon: createVNode(ExclamationCircleOutlined),
+      content: '点击确认离开，做题进度将不被保留！',
+      onOk() {
+        next()
+      },
+      onCancel() {},
+    });
+  },
   methods: {
     mark(){
       let count = 0;
@@ -174,7 +185,7 @@ export default defineComponent({
 
     },
     onFinish() {
-      this.onSubmit();
+      this.submit();
     },
     onNextToEnd() {
       notification.warning({

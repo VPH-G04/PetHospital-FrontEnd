@@ -58,8 +58,16 @@ export default defineComponent({
     onDateChange(dates, dateStrings) {
       this.formState.startTime = dateStrings[0];
       this.formState.endTime = dateStrings[1];
-      console.log(this.formState.startTime);
-    }
+    },
+    getData() {
+      this.$axios.post('/paper/getAllPaper').then(res => {
+        this.paperList = res;
+        this.loading = false;
+      });
+    },
+  },
+  created() {
+    this.getData();
   },
   setup() {
     const router = useRouter();
@@ -103,11 +111,15 @@ export default defineComponent({
             console.log('error', error);
           });
     };
+    const filterOption = (input, option) => {
+      return option.name.toLowerCase().indexOf(input.toLowerCase()) >= 0;
+    };
     return {
       formRef,
       rules,
       formState,
       onSubmit,
+      filterOption,
     };
   }
 });
