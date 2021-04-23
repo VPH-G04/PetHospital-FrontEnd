@@ -13,8 +13,9 @@ export default createStore({
       state.userInfo = data;
     },
     loginOut(state) {
-      Storage.removeItem('userInfo');
       state.userInfo = null;
+      // Storage.removeItem('userInfo');
+      Storage.clear();
     }
   },
   getters: {

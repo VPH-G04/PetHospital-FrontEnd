@@ -4,7 +4,8 @@ import Storage from '@/utils/storage';
 
 // create an axios instance
 const service = axios.create({
-  baseURL: 'http://47.117.135.149:8888',
+  // baseURL: 'http://47.117.135.149:8888',
+  baseURL: '/api',
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 10000 // request timeout
 });

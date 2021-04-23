@@ -16,14 +16,14 @@
           >
             <a-menu-item v-for="item of list" :key="item.link">{{ item.text }}</a-menu-item>
 
-            <a-dropdown placement="bottomRight" style="margin-left: 15px" v-if="userInfo?.username">
+            <a-dropdown placement="bottomRight" style="margin-left: 15px" v-if="getUserInfo">
               <a class="ant-dropdown-link" @click.prevent>
                 <a-avatar
                   size="small"
                   src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png"
                   class="antd-pro-global-header-index-avatar"
                 />
-                <span class="username">{{ userInfo.username }}</span>
+                <span class="username">{{ getUserInfo.username }}</span>
               </a>
               <template #overlay>
                 <a-menu>
@@ -74,6 +74,11 @@ export default defineComponent({
     LoginOutlined
   },
 
+  computed: {
+    getUserInfo() {
+      return this.$store.state.userInfo;
+    }
+  },
   setup() {
     const route = useRoute();
     const menuKeys = ref([route.path]);
@@ -90,9 +95,11 @@ export default defineComponent({
       if (!store.state.userInfo?.username) list = [];
       return list;
     });
-
+    const getUserInfo = computed(() => {
+      return store.state.userInfo;
+    });
     return {
-      userInfo: store.state.userInfo,
+      getUserInfo,
       list,
       menuKeys,
       logout() {

@@ -30,11 +30,20 @@ const routes = [
   },
   {
     path: '/test',
-    name: 'test',
-    component: () => import('../views/custom/test/index.vue'),
+    name: 'Test',
+    component: () => import('../views/custom/test/Test'),
     meta: { access: 'admin' }
   },
-
+  {
+    path: '/test/detail',
+    name: 'Test_Detail',
+    component: () => import('../views/custom/test/Test_Detail'),
+  },
+  {
+    path: '/test/content',
+    name: 'Test_Content',
+    component: () => import('../views/custom/test/Test_Content'),
+  },
   // admin ===
   {
     path: '/case',
@@ -54,15 +63,40 @@ const routes = [
     component: () => import('../views/admin/question/index.vue')
   },
   {
+    path: '/question/add',
+    name: 'questionAdd',
+    component: () => import('../views/admin/question/add.vue')
+  },
+  {
     path: '/examination',
     name: 'examination',
     component: () => import('../views/admin/examination/index.vue')
   },
   {
+    path: '/examination/detail',
+    name: 'examinationDetail',
+    component: () => import('../views/admin/examination/detail.vue')
+  },
+  {
+    path: '/examination/add',
+    name: 'examinationAdd',
+    component: () => import('../views/admin/examination/add.vue')
+  },
+  {
     path: '/testPaper',
     name: 'testPaper',
     component: () => import('../views/admin/testPaper/index.vue')
-  }
+  },
+  {
+    path: '/testPaper/detail',
+    name: 'testPaperDetail',
+    component: () => import('../views/admin/testPaper/detail.vue')
+  },
+  {
+    path: '/testPaper/add',
+    name: 'testPaperAdd',
+    component: () => import('../views/admin/testPaper/add.vue')
+  },
 ];
 
 const router = createRouter({

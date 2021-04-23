@@ -7,5 +7,8 @@ export default Storage = {
   },
   removeItem(key) {
     window.localStorage.removeItem(key);
+  },
+  clear() {
+    window.localStorage.clear();
   }
 };
