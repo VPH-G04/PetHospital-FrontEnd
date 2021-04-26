@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <a-layout style="min-height: 91%">
     <a-layout-content style="padding: 0 50px">
       <a-page-header
           style="padding: 20px 60px"
@@ -24,14 +24,20 @@
 
 
           <div v-if="test.marked">
-            <a-divider>测试结果</a-divider>
-            <a-descriptions size="small" :column="1">
-              <a-descriptions-item label="得分">{{ test.userScore }}</a-descriptions-item>
-              <a-descriptions-item label="提交时间">{{ test.submitTime }}</a-descriptions-item>
-            </a-descriptions>
-            <div style="text-align: center; margin-top: 20px">
-              <a-button type="primary" size="large" disabled>已完成</a-button>
-            </div>
+            <a-divider>已完成</a-divider>
+            <a-result
+                style="padding: 10px 10px"
+                status="success"
+                :title="'得分：'+ test.userScore"
+                :sub-title="'提交时间：'+ test.submitTime"
+            ></a-result>
+<!--            <a-descriptions size="small" :column="1">-->
+<!--              <a-descriptions-item label="得分"><span style="color: #2176de;font-weight: bolder">{{ test.userScore }}</span></a-descriptions-item>-->
+<!--              <a-descriptions-item label="提交时间">{{ test.submitTime }}</a-descriptions-item>-->
+<!--            </a-descriptions>-->
+<!--            <div style="text-align: center; margin-top: 20px">-->
+<!--              <a-button type="primary" size="large" disabled>已完成</a-button>-->
+<!--            </div>-->
           </div>
 
           <div v-else-if="Date.parse(test.end) <= new Date()">
@@ -55,7 +61,7 @@
 
 
     </a-layout-content>
-  </div>
+  </a-layout>
 </template>
 
 <script>

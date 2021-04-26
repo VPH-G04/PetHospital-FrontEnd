@@ -1,69 +1,76 @@
 <template>
-  <div>
-    <a-page-header
-        style="padding: 20px 100px 0 60px"
-        :breadcrumb="{ routes }">
-    </a-page-header>
-    <br><br>
-    <a-row type="flex" justify="space-between">
-      <a-col :span="6" style="margin-left: 50px">
-        <a-spin :spinning="loading" tip="Loading...">
-          <a-card class="card-border" style="min-width: 250px">
-            <h2>{{ paper.name }}</h2>
-            <a-divider></a-divider>
-            <a-descriptions size="small" :column="1">
-              <a-descriptions-item label="试卷ID">{{ paper.id }}</a-descriptions-item>
-              <a-descriptions-item label="试卷名称">{{ paper.name }}</a-descriptions-item>
-              <a-descriptions-item label="总分">{{ paper.score }}</a-descriptions-item>
-            </a-descriptions>
-          </a-card>
-        </a-spin>
-      </a-col>
-      <a-col :span="15" style="margin-left: 50px; margin-top: -40px">
-        <h2>题目列表</h2>
-        <a-table
-            rowKey="id"
-            :columns="columns"
-            :data-source="paper.questionList"
-            :loading="loading"
-            style="width: 700px"
-            :pagination="false"
-        >
-          <template #index="{ index }">
-            {{ parseInt(index) + 1 }}
-          </template>
+  <a-layout style="height: 95%; width: 100%; position: fixed">
+    <a-layout-sider>
+      <admin-menu init-key="4"></admin-menu>
+    </a-layout-sider>
+    <a-layout-content>
+      <div style="margin: 30px auto;width: 90%">
+        <a-page-header
+            :breadcrumb="{ routes }">
+        </a-page-header>
+        <br>
+        <a-row type="flex" justify="space-between" style="min-width: 800px">
+          <a-col :span="7" >
+            <a-spin :spinning="loading" tip="Loading...">
+              <a-card class="card-border" style="min-width: 250px">
+                <h2>{{ paper.name }}</h2>
+                <a-divider></a-divider>
+                <a-descriptions size="small" :column="1">
+                  <a-descriptions-item label="试卷ID">{{ paper.id }}</a-descriptions-item>
+                  <a-descriptions-item label="试卷名称">{{ paper.name }}</a-descriptions-item>
+                  <a-descriptions-item label="总分">{{ paper.score }}</a-descriptions-item>
+                </a-descriptions>
+              </a-card>
+            </a-spin>
+          </a-col>
+          <a-col :span="15" style="margin-top: -60px">
+            <h2>题目列表</h2><br>
+            <a-table
+                rowKey="id"
+                :columns="columns"
+                :data-source="paper.questionList"
+                :loading="loading"
 
-          <template #question="{ text, record, index }">
-            <a-popover :title="text" overlayClassName="pop-card">
-              <template #content>
-                <span>A. {{ record.a }}</span><br>
-                <span>B. {{ record.b }}</span><br>
-                <span>C. {{ record.c }}</span><br>
-                <span>D. {{ record.d }}</span><br><br>
-                <span>答案：{{ record.answer }}</span>
+                :pagination="false"
+                :scroll="{x:700,y:450}"
+            >
+              <template #index="{ index }">
+                {{ parseInt(index) + 1 }}
               </template>
-              <span class="text_overflow-hidden" style="cursor: pointer; width: 400px">{{ text }}</span>
-            </a-popover>
-          </template>
 
-<!--          <template #action="{ record }">-->
-<!--            <span>-->
-<!--              <a-popconfirm title="确定删除？" @confirm="onDelete(record.id)">-->
-<!--              <a href="#">删除</a>-->
-<!--              </a-popconfirm>-->
-<!--            </span>-->
-<!--          </template>-->
+              <template #question="{ text, record, index }">
+                <a-popover :title="text" overlayClassName="pop-card">
+                  <template #content>
+                    <span>A. {{ record.a }}</span><br>
+                    <span>B. {{ record.b }}</span><br>
+                    <span>C. {{ record.c }}</span><br>
+                    <span>D. {{ record.d }}</span><br><br>
+                    <span>答案：{{ record.answer }}</span>
+                  </template>
+                  <span class="text_overflow-hidden" style="cursor: pointer; width: 400px">{{ text }}</span>
+                </a-popover>
+              </template>
 
-        </a-table>
-      </a-col>
-    </a-row>
+              <!--          <template #action="{ record }">-->
+              <!--            <span>-->
+              <!--              <a-popconfirm title="确定删除？" @confirm="onDelete(record.id)">-->
+              <!--              <a href="#">删除</a>-->
+              <!--              </a-popconfirm>-->
+              <!--            </span>-->
+              <!--          </template>-->
 
-  </div>
+            </a-table>
+          </a-col>
+        </a-row>
+      </div>
+    </a-layout-content>
+  </a-layout>
 </template>
 
 <script>
 import {defineComponent, reactive, ref} from 'vue';
 import {message} from "ant-design-vue";
+import AdminMenu from "@/components/Header/AdminMenu";
 
 const routes = [
   {
@@ -76,6 +83,7 @@ const routes = [
   }
 ];
 export default defineComponent({
+  components: {AdminMenu},
   data() {
     return {
       paper: {
@@ -85,9 +93,9 @@ export default defineComponent({
         questionList: [{id: 1,title: '',a:'',b:'',c:'',d:''}],
       },
       columns: [
-        {title: '#', dataIndex: 'index', slots: {customRender: 'index'}},
-        {title: '题目ID', dataIndex: 'id'},
-        {title: '病种ID', dataIndex: 'diseaseId'},
+        {title: '#', width: '50px',dataIndex: 'index', slots: {customRender: 'index'}},
+        {title: '题目ID', width: '80px',dataIndex: 'id'},
+        {title: '病种ID', width: '100px',dataIndex: 'diseaseId'},
         {title: '题名', dataIndex: 'title', slots: {customRender: 'question'}},
         // {title: '操作', dataIndex: 'action', slots: {customRender: 'action'}},
       ],

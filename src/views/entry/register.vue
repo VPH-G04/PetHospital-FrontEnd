@@ -1,38 +1,53 @@
 <template>
-  <a-form
-    name="custom-validation"
-    class="p-container"
-    style="width: 520px"
-    ref="formRef"
-    :model="formState"
-    :rules="rules"
-    v-bind="layout"
-    @finish="handleFinish"
-    @finishFailed="handleFinishFailed"
-  >
-    <a-form-item has-feedback label="电子邮箱" name="email">
-      <a-input v-model:value="formState.email" type="email" autocomplete="off" />
-    </a-form-item>
-    <a-form-item required has-feedback label="用户名" name="username">
-      <a-input v-model:value="formState.username" autocomplete="off" />
-    </a-form-item>
-    <a-form-item required has-feedback label="密码" name="password">
-      <a-input v-model:value="formState.password" type="password" autocomplete="off" />
-    </a-form-item>
-    <a-form-item has-feedback label="确认密码" name="checkPass">
-      <a-input v-model:value="formState.checkPass" type="password" autocomplete="off" />
-    </a-form-item>
 
-    <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
-      <a-button type="primary" block html-type="submit">注册</a-button>
-    </a-form-item>
-  </a-form>
+  <div :style="'background-image:url('+img1+')'"
+       style="height: 100%; width: 100%;position: fixed;
+       background-repeat: no-repeat;background-position: 10% center">
+    <a-card style="margin: 100px 120px 0;width: 430px;float: right;opacity: 0.95;box-shadow: 2px 2px 10px #888888;">
+
+      <h2>注册</h2>
+      <a-divider></a-divider>
+      <a-form
+          name="custom-validation"
+          ref="formRef"
+          style="width: 450px;"
+          :model="formState"
+          :rules="rules"
+          v-bind="layout"
+          @finish="handleFinish"
+          @finishFailed="handleFinishFailed"
+      >
+        <a-form-item has-feedback label="电子邮箱" name="email">
+          <a-input v-model:value="formState.email" type="email" autocomplete="off" />
+        </a-form-item>
+        <a-form-item required has-feedback label="用户名" name="username">
+          <a-input v-model:value="formState.username" autocomplete="off" />
+        </a-form-item>
+        <a-form-item required has-feedback label="密码" name="password">
+          <a-input v-model:value="formState.password" type="password" autocomplete="off" />
+        </a-form-item>
+        <a-form-item has-feedback label="确认密码" name="checkPass">
+          <a-input v-model:value="formState.checkPass" type="password" autocomplete="off" />
+        </a-form-item>
+        <div class="tips">
+          <router-link to="/login">返回登录</router-link>
+        </div>
+        <a-form-item :wrapper-col="{ span: 14, offset: 4 }" style="margin-bottom: 0">
+          <a-button type="primary" block html-type="submit">注册</a-button>
+        </a-form-item>
+      </a-form>
+
+    </a-card>
+  </div>
+
+
 </template>
 <script>
 import { message, Modal } from 'ant-design-vue';
 import { defineComponent, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from '@/utils/axios';
+const img1 = require('../../assets/background2.jpg');
 
 const layout = {
   labelCol: { span: 4 },
@@ -106,6 +121,7 @@ export default defineComponent({
       formRef,
       rules,
       layout,
+      img1,
       handleFinishFailed,
       handleFinish,
       resetForm
@@ -113,3 +129,11 @@ export default defineComponent({
   }
 });
 </script>
+
+<style scoped>
+.tips {
+  text-align: right;
+  margin-bottom: 20px;
+  margin-right: 120px;
+}
+</style>

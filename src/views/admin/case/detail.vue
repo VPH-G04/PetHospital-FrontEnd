@@ -1,21 +1,32 @@
 <template>
   <div class="p-container">
-    <h2 class="text-center mb-24">详情</h2>
-    <a-empty></a-empty>
+    <h2 class="text-center mb-24">{{ state.name }}</h2>
 
-    <!-- <pre>{{ JSON.stringify(query, null, 2) }}</pre> -->
+    <div v-for="(item, index) of state.procedureVOS" :key="index">
+      {{ item.describe }}
+      <img v-for="(item, index) of item.images" :key="index" :src="item" />
+    </div>
   </div>
 </template>
 
 <script>
-import { defineComponent, onMounted } from 'vue';
+import { defineComponent, onMounted, reactive } from 'vue';
 import { useRoute } from 'vue-router';
+import axios from '@/utils/axios';
 
 export default defineComponent({
   setup() {
+    const state = reactive({ name: '', procedureVOS: [] });
+
     const route = useRoute();
 
-    return { query: route.query };
+    onMounted(async () => {
+      const { data } = await axios.post(`/case/get?id=${route.query.id}`, { id: route.query.id });
+      state.name = data.name;
+      state.procedureVOS = data.procedureVOS;
+    });
+
+    return { query: route.query, state };
   }
 });
 </script>

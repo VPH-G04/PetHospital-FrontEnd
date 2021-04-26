@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <a-layout style="min-height: 91%">
     <a-layout-content style="padding: 0 50px">
       <a-page-header
           style="padding: 20px 100px 0 60px"
@@ -45,7 +45,7 @@
       </a-spin>
 
     </a-layout-content>
-  </div>
+  </a-layout>
 </template>
 
 <script>

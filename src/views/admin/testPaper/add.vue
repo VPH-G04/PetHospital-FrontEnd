@@ -1,129 +1,135 @@
 <template>
-  <a-form
-      ref="formRef"
-      layout="vertical"
-      :model="formState"
-      :rules="rules"
-      style="width: 400px; margin: 40px auto 0"
-  >
-    <h2 class="text-center">新增试卷</h2><br>
+  <a-layout style="height: 95%; width: 100%; position: fixed">
+    <a-layout-sider>
+      <admin-menu init-key="4"></admin-menu>
+    </a-layout-sider>
+    <a-layout-content>
+      <div style="margin: 30px auto;width: 90%">
+        <a-form
+            ref="formRef"
+            layout="vertical"
+            :model="formState"
+            :rules="rules"
+            style="width: 400px; margin: 40px auto"
+        >
+          <h2 class="text-center" style="font-weight: bold;">新增试卷</h2><br>
 
-    <a-form-item name="name" label="试卷名称">
-      <a-input v-model:value="formState.name" placeholder="请输入试卷名称"></a-input>
-    </a-form-item>
-    <a-form-item name="score" label="总分">
-      <a-input-number v-model:value="formState.score" :min="1" :max="1000"></a-input-number>
-    </a-form-item>
-    <a-form-item name="question" label="试题">
+          <a-form-item name="name" label="试卷名称">
+            <a-input v-model:value="formState.name" placeholder="请输入试卷名称"></a-input>
+          </a-form-item>
+          <a-form-item name="score" label="总分">
+            <a-input-number v-model:value="formState.score" :min="1" :max="1000"></a-input-number>
+          </a-form-item>
+          <a-form-item name="question" label="试题">
 
-      <a-button type="primary" @click="showDrawer">添加试题</a-button>
-      <a-table
-          rowKey="id"
-          :columns="columns"
-          :data-source="formState.questions"
-          style="width: 400px; margin-top: 5px"
-          :pagination="false"
-      >
-        <template #index="{ index }">
-          {{ parseInt(index) + 1 }}
-        </template>
-        <template #question="{ text, record, index }">
-          <a-popover :title="text" overlayClassName="pop-card">
-            <template #content>
-              <span>A. {{ record.a }}</span><br>
-              <span>B. {{ record.b }}</span><br>
-              <span>C. {{ record.c }}</span><br>
-              <span>D. {{ record.d }}</span><br><br>
-              <span>答案：{{ record.answer }}</span>
-            </template>
-            <span class="text_overflow-hidden" style="cursor: pointer; width: 200px">{{ text }}</span>
-          </a-popover>
-        </template>
+            <a-button type="primary" @click="showDrawer">添加试题</a-button>
+            <a-table
+                rowKey="id"
+                :columns="columns"
+                :data-source="formState.questions"
+                style="width: 400px; margin-top: 5px"
+                :pagination="false"
+            >
+              <template #index="{ index }">
+                {{ parseInt(index) + 1 }}
+              </template>
+              <template #question="{ text, record, index }">
+                <a-popover :title="text" overlayClassName="pop-card">
+                  <template #content>
+                    <span>A. {{ record.a }}</span><br>
+                    <span>B. {{ record.b }}</span><br>
+                    <span>C. {{ record.c }}</span><br>
+                    <span>D. {{ record.d }}</span><br><br>
+                    <span>答案：{{ record.answer }}</span>
+                  </template>
+                  <span class="text_overflow-hidden" style="cursor: pointer; width: 200px">{{ text }}</span>
+                </a-popover>
+              </template>
 
 
-        <template #action="{ record, index }">
+              <template #action="{ record, index }">
             <span @click="onDelete(index)" style="cursor:pointer;">
               <MinusCircleTwoTone twoToneColor="red"/>
             </span>
-        </template>
+              </template>
+            </a-table>
+          </a-form-item>
+          <a-button block type="primary" @click="onSubmit">提交</a-button><br><br>
+          <a-button block @click="$router.go(-1)">取消</a-button><br><br>
+        </a-form>
+        <a-drawer
+            title="题目列表"
+            placement="right"
+            :closable="false"
+            :visible="visible"
+            :get-container="false"
+            width="700px"
 
-      </a-table>
-    </a-form-item>
+            @close="onClose"
+        >
+          <a-table
+              rowKey="id"
+              :columns="columns"
+              :data-source="questionList.list"
+              :loading="loading"
+              :pagination="false"
+              style="margin: -10px 0 auto 0;width: 100%"
+          >
+            <template #title>
+              <a-select
+                  v-model:value="diseaseId"
+                  placeholder="请选择病种">
+                <a-select-option v-for="item in disease" :value="item.id" :name="item.name">{{
+                    item.name
+                  }}
+                </a-select-option>
+              </a-select>
+            </template>
 
+            <template #index="{ index }">
+              {{ parseInt(index) + 1 }}
+            </template>
 
-    <a-form-item>
-      <a-button block type="primary" @click="onSubmit">提交</a-button>
-    </a-form-item>
-  </a-form>
-  <a-drawer
-      title="题目列表"
-      placement="left"
-      :closable="false"
-      :visible="visible"
-      :get-container="false"
-      width="700px"
+            <template #question="{ text, record, index }">
+              <a-popover :title="text" overlayClassName="pop-card">
+                <template #content>
+                  <span>A. {{ record.a }}</span><br>
+                  <span>B. {{ record.b }}</span><br>
+                  <span>C. {{ record.c }}</span><br>
+                  <span>D. {{ record.d }}</span><br><br>
+                  <span>答案：{{ record.answer }}</span>
+                </template>
+                <span class="text_overflow-hidden" style="cursor: pointer; width: 450px">{{ text }}</span>
+              </a-popover>
+            </template>
 
-      @close="onClose"
-  >
-    <a-table
-        rowKey="id"
-        :columns="columns"
-        :data-source="questionList.list"
-        :loading="loading"
-        :pagination="false"
-        style="margin: -10px 0 auto 0;width: 100%"
-    >
-      <template #title>
-        <a-select
-            v-model:value="diseaseId"
-            placeholder="请选择病种">
-          <a-select-option v-for="item in disease" :value="item.id" :name="item.name">{{
-              item.name
-            }}
-          </a-select-option>
-        </a-select>
-      </template>
-
-      <template #index="{ index }">
-        {{ parseInt(index) + 1 }}
-      </template>
-
-      <template #question="{ text, record, index }">
-        <a-popover :title="text" overlayClassName="pop-card">
-          <template #content>
-            <span>A. {{ record.a }}</span><br>
-            <span>B. {{ record.b }}</span><br>
-            <span>C. {{ record.c }}</span><br>
-            <span>D. {{ record.d }}</span><br><br>
-            <span>答案：{{ record.answer }}</span>
-          </template>
-          <span class="text_overflow-hidden" style="cursor: pointer; width: 450px">{{ text }}</span>
-        </a-popover>
-      </template>
-
-      <template #action="{ record,index }">
+            <template #action="{ record,index }">
         <span @click="onAdd(index)" style="cursor:pointer;">
           <PlusCircleTwoTone/>
         </span>
-      </template>
+            </template>
 
 
-    </a-table>
-    <br>
-    <a-pagination
-        show-size-changer
-        v-model:current="pageParam.pageNum"
-        v-model:pageSize="pageParam.pageSize"
-        :pageSizeOptions="['10','20','50','100']"
-        :total="questionList.total"
-        :show-total="total => `共 ${total} 条`"
-        @showSizeChange="onPageChange"
-        @change="onPageChange"
-        style="text-align: center"
-    />
-    <br>
+          </a-table>
+          <br>
+          <a-pagination
+              show-size-changer
+              v-model:current="pageParam.pageNum"
+              v-model:pageSize="pageParam.pageSize"
+              :pageSizeOptions="['10','20','50','100']"
+              :total="questionList.total"
+              :show-total="total => `共 ${total} 条`"
+              @showSizeChange="onPageChange"
+              @change="onPageChange"
+              style="text-align: center"
+          />
+          <br>
 
-  </a-drawer>
+        </a-drawer>
+      </div>
+    </a-layout-content>
+  </a-layout>
+
 
 
 </template>
@@ -135,9 +141,11 @@ import {useRouter} from "vue-router";
 import axios from "@/utils/axios";
 import {message} from "ant-design-vue";
 import {MinusCircleTwoTone, PlusCircleTwoTone} from "@ant-design/icons-vue";
+import AdminMenu from "@/components/Header/AdminMenu";
 
 export default defineComponent({
   components: {
+    AdminMenu,
     MinusCircleTwoTone,
     PlusCircleTwoTone
   },

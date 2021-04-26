@@ -1,100 +1,121 @@
 <template>
-  <div>
-    <a-drawer
-        title="题目详情"
-        placement="left"
-        :closable="false"
-        :visible="visible"
-        :get-container="false"
-        width="30%"
-        :wrap-style="{ position: 'absolute' }"
-        @close="onClose"
-    >
-      <p>{{ question.title }}</p>
-      <p>A. {{ question.a }}</p>
-      <p>B. {{ question.b }}</p>
-      <p>C. {{ question.c }}</p>
-      <p>D. {{ question.d }}</p>
-      <a-divider></a-divider>
-      <p>答案：{{ question.answer }}</p>
-    </a-drawer>
 
-    <a-table
-        rowKey="id"
-        :columns="columns"
-        :data-source="questionList.list"
-        :loading="loading"
-        :pagination="false"
-        style="margin: 10px auto 0;width: 800px"
-    >
-      <template #title>
-        <a-button type="primary" @click="onAdd">增加试题</a-button>
+  <a-layout style="height: 95%; width: 100%; position: fixed">
+    <a-layout-sider>
+      <admin-menu init-key="3"></admin-menu>
+    </a-layout-sider>
+    <a-layout-content>
+      <div style="margin: 30px auto;width: 90%">
+        <div>
+          <a-drawer
+              title="题目详情"
+              placement="right"
+              :closable="false"
+              :visible="visible"
+              :get-container="false"
+              width="30%"
+              :wrap-style="{ position: 'absolute' }"
+              @close="onClose"
+          >
+            <p>{{ question.title }}</p>
+            <p>A. {{ question.a }}</p>
+            <p>B. {{ question.b }}</p>
+            <p>C. {{ question.c }}</p>
+            <p>D. {{ question.d }}</p>
+            <a-divider></a-divider>
+            <p>答案：{{ question.answer }}</p>
+          </a-drawer>
 
-        <a-select
-            v-model:value="diseaseId"
-            placeholder="请选择病种"
-            style="float: right"
-        >
-          <a-select-option v-for="item in disease" :value="item.id" :name="item.name">{{ item.name }}</a-select-option>
-        </a-select>
-      </template>
+          <a-space :size="20">
+            <a-button type="primary" @click="onAdd">增加试题</a-button>
 
-      <template #index="{ index }">
-        {{ parseInt(index) + 1 }}
-      </template>
-      <template #question="{ text, record, index }">
-        <a-popover :title="text" overlayClassName="pop-card">
-          <template #content>
-            <span>A. {{ record.a }}</span><br>
-            <span>B. {{ record.b }}</span><br>
-            <span>C. {{ record.c }}</span><br>
-            <span>D. {{ record.d }}</span><br><br>
-            <span>答案：{{ record.answer }}</span>
-          </template>
-          <span class="text_overflow-hidden" style="cursor: pointer; width: 450px">{{ text }}</span>
-        </a-popover>
-      </template>
-      <template #action="{ record,index }">
+            <a-input-search
+                v-model:value="value"
+                placeholder="搜索题目名称"
+                enter-button
+                @search="onSearch"
+            />
+
+            <a-select
+                v-model:value="diseaseId"
+                placeholder="请选择病种"
+            >
+              <a-select-option v-for="item in disease" :value="item.id" :name="item.name">{{ item.name }}</a-select-option>
+            </a-select>
+          </a-space>
+          <br><br>
+
+          <a-table
+              rowKey="id"
+              :columns="columns"
+              :data-source="questionList.list"
+              :loading="loading"
+              :pagination="false"
+          >
+            <template #index="{ index }">
+              {{ parseInt(index) + 1 }}
+            </template>
+            <template #question="{ text, record, index }">
+              <a-popover :title="text" overlayClassName="pop-card">
+                <template #content>
+                  <span>A. {{ record.a }}</span><br>
+                  <span>B. {{ record.b }}</span><br>
+                  <span>C. {{ record.c }}</span><br>
+                  <span>D. {{ record.d }}</span><br><br>
+                  <span>答案：{{ record.answer }}</span>
+                </template>
+                <span class="text_overflow-hidden" style="cursor: pointer; width: 800px">{{ text }}</span>
+              </a-popover>
+            </template>
+            <template #action="{ record,index }">
         <span>
 <!--          <a-typography-link @click="showDrawer(index)">详情</a-typography-link>-->
-<!--          <a-divider type="vertical"/>-->
+          <!--          <a-divider type="vertical"/>-->
           <a-popconfirm title="确定删除？" @confirm="onDelete(record.id)">
             <a href="#">删除</a>
           </a-popconfirm>
         </span>
-      </template>
+            </template>
 
 
-    </a-table>
-    <br>
-    <a-pagination
-        show-size-changer
-        v-model:current="pageParam.pageNum"
-        v-model:pageSize="pageParam.pageSize"
-        :pageSizeOptions="['10','20','50','100']"
-        :total="questionList.total"
-        :show-total="total => `共 ${total} 条`"
-        @showSizeChange="onPageChange"
-        @change="onPageChange"
-        style="text-align: center"
-    /><br>
-  </div>
+          </a-table>
+          <br>
+          <a-pagination
+              show-size-changer
+              v-model:current="pageParam.pageNum"
+              v-model:pageSize="pageParam.pageSize"
+              :pageSizeOptions="['10','20','50','100']"
+              :total="questionList.total"
+              :show-total="total => `共 ${total} 条`"
+              @showSizeChange="onPageChange"
+              @change="onPageChange"
+              style="text-align: center"
+          /><br>
+        </div>
+      </div>
+    </a-layout-content>
+  </a-layout>
+
+
 </template>
 
 <script>
 import {defineComponent, reactive, ref} from 'vue';
 import {message} from "ant-design-vue";
+import AdminMenu from "@/components/Header/AdminMenu";
 
 export default defineComponent({
+  components: {AdminMenu},
   data() {
     return {
       columns: [
-        {title: '#', dataIndex: 'index', slots: {customRender: 'index'}},
-        {title: '题目ID', dataIndex: 'id'},
-        {title: '题名', dataIndex: 'title', width: '240px', slots: {customRender: 'question'}},
+        {title: '#', width:'80px',dataIndex: 'index', slots: {customRender: 'index'}},
+        {title: '题目ID', width:'100px', dataIndex: 'id'},
+        {title: '题名', dataIndex: 'title', slots: {customRender: 'question'}},
         {
           title: '操作',
           dataIndex: 'action',
+          width:'80px',
           slots: {customRender: 'action'},
         },
       ],

@@ -1,67 +1,74 @@
 <template>
-  <div>
-    <a-page-header
-        style="padding: 20px 100px 0 60px"
-        :breadcrumb="{ routes }">
-    </a-page-header>
-    <br><br>
-    <a-row type="flex" justify="space-between">
-      <a-col :span="5" style="margin-left: 50px">
-        <a-spin :spinning="loading1" tip="Loading...">
-          <a-card class="card-border" style="min-width: 200px">
-            <h2>{{ test.name }}</h2>
-            <a-divider></a-divider>
-            <a-descriptions size="small" :column="1">
-              <a-descriptions-item label="试卷名称">{{ test.paperName }}</a-descriptions-item>
-              <a-descriptions-item label="题目数量">{{ test.questionNum }}</a-descriptions-item>
-              <a-descriptions-item label="总分">{{ test.score }}</a-descriptions-item>
-              <a-descriptions-item label="考试时长">{{ test.duration }}分钟</a-descriptions-item>
-              <a-descriptions-item label="开始时间">{{ test.start }}</a-descriptions-item>
-              <a-descriptions-item label="结束时间">{{ test.end }}</a-descriptions-item>
-            </a-descriptions>
-          </a-card>
-        </a-spin>
-      </a-col>
-      <a-col :span="15" style="margin-left: 50px; margin-top: -40px">
-        <h2>提交记录</h2>
-        <a-table
-            rowKey="id"
-            :columns="columns"
-            :data-source="testLog.list"
-            :loading="loading2"
-            style="width: 500px"
-            :pagination="false"
-        >
-          <template #action="{ record }">
+
+  <a-layout style="height: 95%; width: 100%; position: fixed">
+    <a-layout-sider>
+      <admin-menu init-key="5"></admin-menu>
+    </a-layout-sider>
+    <a-layout-content>
+      <div style="margin: 30px auto;width: 90%">
+        <a-page-header
+            :breadcrumb="{ routes }">
+        </a-page-header>
+        <br>
+        <a-row type="flex" justify="space-between">
+          <a-col :span="7" >
+            <a-spin :spinning="loading1" tip="Loading...">
+              <a-card class="card-border" style="min-width: 200px">
+                <h2>{{ test.name }}</h2>
+                <a-divider></a-divider>
+                <a-descriptions size="small" :column="1">
+                  <a-descriptions-item label="试卷名称">{{ test.paperName }}</a-descriptions-item>
+                  <a-descriptions-item label="题目数量">{{ test.questionNum }}</a-descriptions-item>
+                  <a-descriptions-item label="总分">{{ test.score }}</a-descriptions-item>
+                  <a-descriptions-item label="考试时长">{{ test.duration }}分钟</a-descriptions-item>
+                  <a-descriptions-item label="开始时间">{{ test.start }}</a-descriptions-item>
+                  <a-descriptions-item label="结束时间">{{ test.end }}</a-descriptions-item>
+                </a-descriptions>
+              </a-card>
+            </a-spin>
+          </a-col>
+          <a-col :span="15" style="margin-left: 50px; margin-top: -60px">
+            <h2>提交记录</h2><br>
+            <a-table
+                rowKey="id"
+                :columns="columns"
+                :data-source="testLog.list"
+                :loading="loading2"
+                style="width: 500px"
+                :pagination="false"
+            >
+              <template #action="{ record }">
             <span>
               <a-popconfirm title="确定删除？" @confirm="onDelete(record.id)">
               <a href="#">删除</a>
               </a-popconfirm>
             </span>
-          </template>
+              </template>
 
-        </a-table>
-        <br>
-        <a-pagination
-            show-size-changer
-            v-model:current="pageParam.pageNum"
-            v-model:pageSize="pageParam.pageSize"
-            :pageSizeOptions="['10','20','50','100']"
-            :total="testLog.total"
-            :show-total="total => `共 ${total} 条`"
-            @showSizeChange="onPageChange"
-            @change="onPageChange"
-        /><br>
+            </a-table>
+            <br>
+            <a-pagination
+                show-size-changer
+                v-model:current="pageParam.pageNum"
+                v-model:pageSize="pageParam.pageSize"
+                :pageSizeOptions="['10','20','50','100']"
+                :total="testLog.total"
+                :show-total="total => `共 ${total} 条`"
+                @showSizeChange="onPageChange"
+                @change="onPageChange"
+            /><br>
 
-      </a-col>
-    </a-row>
-
-  </div>
+          </a-col>
+        </a-row>
+      </div>
+    </a-layout-content>
+  </a-layout>
 </template>
 
 <script>
 import {defineComponent, reactive, ref} from 'vue';
 import {message} from "ant-design-vue";
+import AdminMenu from "@/components/Header/AdminMenu";
 const routes = [
   {
     path: '/examination',
@@ -73,6 +80,7 @@ const routes = [
   }
 ];
 export default defineComponent({
+  components: {AdminMenu},
   data() {
     return {
       test: {

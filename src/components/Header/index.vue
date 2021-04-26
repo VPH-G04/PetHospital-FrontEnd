@@ -3,8 +3,8 @@
     <a-layout-header class="header">
       <a-row justify="space-between">
         <a-col>
-          <div class="logo" />
-          <span class="title">虚拟宠物医院</span>
+          <div class="logo" style="margin-left: -30px"/>
+          <span class="title">虚拟宠物医院学习系统</span>
         </a-col>
         <a-col>
           <a-menu
@@ -53,10 +53,10 @@ import useUserStore from '@/hooks/useUserStore';
 import { mapGetters, useStore } from 'vuex';
 
 const adminList = [
-  { link: '/case', text: '病例管理' },
-  { link: '/question', text: '题库管理' },
-  { link: '/testPaper', text: '试卷管理' },
-  { link: '/examination', text: '考试管理' }
+  // { link: '/case', text: '病例管理' },
+  // { link: '/question', text: '题库管理' },
+  // { link: '/testPaper', text: '试卷管理' },
+  // { link: '/examination', text: '考试管理' }
 ];
 
 const customList = [
@@ -87,7 +87,8 @@ export default defineComponent({
     const { userInfo, logout } = useUserStore();
 
     router.afterEach((to, from) => {
-      menuKeys.value = [to.path];
+      // menuKeys.value = [to.path];
+      menuKeys.value = [to.path.substring(0, to.path.indexOf('/', 1) > 0 ? to.path.indexOf('/', 1): to.path.length)];
     });
 
     const list = computed(() => {

@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <a-layout style="min-height: 91%">
     <a-layout-content style="padding: 0 50px">
       <a-page-header
           style="padding: 20px 60px 20px 60px"
-          title="考试一"
+          :title="test.name"
           @back="() => $router.go(-1)"
       >
         <template #extra>
@@ -92,7 +92,7 @@
 
 
     </a-layout-content>
-  </div>
+  </a-layout>
 </template>
 
 <script>

@@ -14,25 +14,36 @@ const routes = [
     path: '/guided',
     name: 'guided',
     component: () => import('../views/custom/guided/index.vue'),
-    meta: { access: 'admin' }
   },
   {
     path: '/skill-learn',
     name: 'skill',
     component: () => import('../views/custom/skillLearn/index.vue'),
-    meta: { access: 'admin' }
+  },
+  {
+    path: '/skill-learn/detail',
+    name: 'skillDetail',
+    component: () => import('../views/custom/skillLearn/detail.vue'),
   },
   {
     path: '/case-learn',
     name: 'caseLearn',
-    component: () => import('../views/custom/caseLearn/index.vue'),
-    meta: { access: 'admin' }
+    component: () => import('../views/custom/caseLearn/Disease.vue'),
+  },
+  {
+    path: '/case-learn/case',
+    name: 'caseLearnCase',
+    component: () => import('../views/custom/caseLearn/Case.vue'),
+  },
+  {
+    path: '/case-learn/detail',
+    name: 'caseLearnDetail',
+    component: () => import('../views/custom/caseLearn/Detail.vue'),
   },
   {
     path: '/test',
     name: 'Test',
     component: () => import('../views/custom/test/Test'),
-    meta: { access: 'admin' }
   },
   {
     path: '/test/detail',
@@ -46,17 +57,25 @@ const routes = [
   },
   // admin ===
   {
+    path: '/user',
+    name: 'user',
+    component: () => import('../views/admin/user/index.vue'),
+  },
+  {
     path: '/case',
     name: 'case',
     component: () => import('../views/admin/case/index.vue'),
-    meta: { access: 'admin' }
   },
   {
     path: '/case/details',
     name: 'caseDetail',
     component: () => import('../views/admin/case/detail.vue')
   },
-
+  {
+    path: '/case/add',
+    name: 'caseAdd',
+    component: () => import('../views/admin/case/add.vue')
+  },
   {
     path: '/question',
     name: 'question',

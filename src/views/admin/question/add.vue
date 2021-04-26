@@ -1,48 +1,58 @@
 <template>
-  <a-form
-      ref="formRef"
-      :label-col="{span: 4}" :wrapper-col="{span: 20}"
-      :model="formState"
-      :rules="rules"
-      style="width: 350px; margin: 40px auto 0"
-  >
-    <h2 class="text-center">新增试题</h2><br>
+  <a-layout style="height: 95%; width: 100%; position: fixed">
+    <a-layout-sider>
+      <admin-menu init-key="3"></admin-menu>
+    </a-layout-sider>
+    <a-layout-content>
+      <div style="margin: 30px auto;width: 90%">
+        <a-form
+            ref="formRef"
+            :label-col="{span: 4}" :wrapper-col="{span: 20}"
+            :model="formState"
+            :rules="rules"
+            style="width: 350px; margin: 40px auto 0"
+        >
+          <h1 class="text-center" style="font-weight: bold">新增试题</h1><br>
 
-    <a-form-item name="disease" label="病种">
-      <a-select
-          v-model:value="formState.diseaseId"
-          placeholder="请选择病种"
-          style="float: right"
-      >
-        <a-select-option v-for="item in disease" :value="item.id" :name="item.name">{{ item.name }}</a-select-option>
-      </a-select>
-    </a-form-item>
-    <a-form-item name="title" label="题干">
-      <a-textarea v-model:value="formState.title" placeholder="请输入题干" :rows="3"></a-textarea>
-    </a-form-item>
-    <a-form-item name="a" label="选项A">
-      <a-input v-model:value="formState.a" placeholder="请输入选项A"></a-input>
-    </a-form-item>
-    <a-form-item name="b" label="选项B">
-      <a-input v-model:value="formState.b" placeholder="请输入选项B"></a-input>
-    </a-form-item>
-    <a-form-item name="c" label="选项C">
-      <a-input v-model:value="formState.c" placeholder="请输入选项C"></a-input>
-    </a-form-item>
-    <a-form-item name="d" label="选项D">
-      <a-input v-model:value="formState.d" placeholder="请输入选项D"></a-input>
-    </a-form-item>
-    <a-form-item name="answer" label="答案">
-      <a-radio-group v-model:value="formState.answer">
-        <a-radio value="a">A</a-radio>
-        <a-radio value="b">B</a-radio>
-        <a-radio value="c">C</a-radio>
-        <a-radio value="d">D</a-radio>
-      </a-radio-group>
-    </a-form-item>
+          <a-form-item name="disease" label="病种">
+            <a-select
+                v-model:value="formState.diseaseId"
+                placeholder="请选择病种"
+            >
+              <a-select-option v-for="item in disease" :value="item.id" :name="item.name">{{ item.name }}</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item name="title" label="题干">
+            <a-textarea v-model:value="formState.title" placeholder="请输入题干" :auto-size="{ minRows: 2, maxRows: 5 }"></a-textarea>
+          </a-form-item>
+          <a-form-item name="a" label="选项A">
+            <a-textarea v-model:value="formState.a" placeholder="请输入选项A" auto-size></a-textarea>
+          </a-form-item>
+          <a-form-item name="b" label="选项B">
+            <a-textarea v-model:value="formState.b" placeholder="请输入选项B" auto-size></a-textarea>
+          </a-form-item>
+          <a-form-item name="c" label="选项C">
+            <a-textarea v-model:value="formState.c" placeholder="请输入选项C" auto-size></a-textarea>
+          </a-form-item>
+          <a-form-item name="d" label="选项D">
+            <a-textarea v-model:value="formState.d" placeholder="请输入选项D" auto-size></a-textarea>
+          </a-form-item>
+          <a-form-item name="answer" label="答案">
+            <a-radio-group v-model:value="formState.answer">
+              <a-radio value="a">A</a-radio>
+              <a-radio value="b">B</a-radio>
+              <a-radio value="c">C</a-radio>
+              <a-radio value="d">D</a-radio>
+            </a-radio-group>
+          </a-form-item>
+          <a-button block type="primary" @click="onSubmit">提交</a-button><br><br>
+          <a-button block @click="$router.go(-1)">取消</a-button><br><br>
+        </a-form>
+      </div>
+    </a-layout-content>
+  </a-layout>
 
-    <a-button block type="primary" @click="onSubmit">提交</a-button>
-  </a-form>
+
 </template>
 
 <script>
@@ -51,9 +61,10 @@ import useUserStore from "@/hooks/useUserStore";
 import {useRouter} from "vue-router";
 import axios from "@/utils/axios";
 import {message} from "ant-design-vue";
+import AdminMenu from "@/components/Header/AdminMenu";
 
 export default defineComponent({
-
+  components: {AdminMenu},
   data() {
     return {
       disease: [
