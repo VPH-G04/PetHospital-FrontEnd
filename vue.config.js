@@ -6,8 +6,8 @@ module.exports = {
     },
     proxy:{
       '/api':{
-        // target: 'http://localhost:8888',
-        target: 'http://47.117.135.149:8888',
+        target: 'http://localhost:8888',
+        // target: 'http://47.117.135.149:8888',
         pathRewrite:{
           '^/api': ''
         }
