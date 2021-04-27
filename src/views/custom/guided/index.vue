@@ -8,17 +8,24 @@
             <a-menu
                     v-model:openKeys="openKeys"
                     v-model:selectedKeys="selectedKeys"
-                    style=""
+                    style="margin-top: 20px"
                     mode="vertical"
                     @click="handleClick"
             >
                 <a-menu-item key="1">
-                    <!--                    <MailOutlined />-->
-                    Navigation One
+                    前台
                 </a-menu-item>
                 <a-menu-item key="2">
-                    <!--                    <CalendarOutlined />-->
-                    Navigation Two
+                    诊室
+                </a-menu-item>
+                <a-menu-item key="3">
+                    免疫室
+                </a-menu-item>
+                <a-menu-item key="4">
+                    化验室
+                </a-menu-item>
+                <a-menu-item key="5">
+                    影像室
                 </a-menu-item>
             </a-menu>
         </div>
@@ -78,22 +85,6 @@
                     tab1: 'content1',
                     tab2: 'content2',
                 },
-                tabListNoTitle: [
-                    {
-                        key: 'article',
-                        tab: 'article',
-                    },
-                    {
-                        key: 'app',
-                        tab: 'app',
-                    },
-                    {
-                        key: 'project',
-                        tab: 'project',
-                    },
-                ],
-                // key: 'tab1',
-                // noTitleKey: 'app',
             };
         },
         mounted() {
@@ -146,7 +137,8 @@
     }
     #slide {
         margin-top: 20px;
-        width: 15%;
+        margin-right: 20px;
+        width: 13%;
     }
 
 </style>
