@@ -62,6 +62,11 @@ const routes = [
     component: () => import('../views/admin/user/index.vue'),
   },
   {
+    path: '/department',
+    name: 'department',
+    component: () => import('../views/admin/department/index.vue'),
+  },
+  {
     path: '/case',
     name: 'case',
     component: () => import('../views/admin/case/index.vue'),

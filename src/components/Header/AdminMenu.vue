@@ -9,6 +9,10 @@
       <UserOutlined />
       <span>用户管理</span>
     </a-menu-item>
+    <a-menu-item key="0">
+      <HomeOutlined />
+      <span>科室管理</span>
+    </a-menu-item>
     <a-menu-item key="2">
       <ProfileOutlined />
       <span>病例管理</span>
@@ -37,7 +41,8 @@ import {
   CreditCardOutlined,
   FileTextOutlined,
   ProfileOutlined,
-  UserOutlined
+  UserOutlined,
+  HomeOutlined
 } from "@ant-design/icons-vue";
 
 export default defineComponent({
@@ -47,7 +52,8 @@ export default defineComponent({
     ProfileOutlined,
     ClusterOutlined,
     FileTextOutlined,
-    CreditCardOutlined
+    CreditCardOutlined,
+    HomeOutlined
 
   },
   props: {
@@ -60,6 +66,9 @@ export default defineComponent({
     clickMenu(key) {
       console.log(key);
       switch (key.key) {
+        case '0':
+          this.$router.push('/department');
+          break;
         case '1':
           this.$router.push('/user');
           break;
