@@ -1,15 +1,153 @@
 <template>
-  <div class="page">导览</div>
+    <div id="wrapper" align="center">
+
+        <div id="pano" align="center"></div>
+    </div>
+    <div id="department-info">
+        <div id="slide">
+            <a-menu
+                    v-model:openKeys="openKeys"
+                    v-model:selectedKeys="selectedKeys"
+                    style=""
+                    mode="vertical"
+                    @click="handleClick"
+            >
+                <a-menu-item key="1">
+                    <!--                    <MailOutlined />-->
+                    Navigation One
+                </a-menu-item>
+                <a-menu-item key="2">
+                    <!--                    <CalendarOutlined />-->
+                    Navigation Two
+                </a-menu-item>
+            </a-menu>
+        </div>
+        <div id="info-card">
+           <a-card
+                   style="width: 100%; margin:auto"
+                   title="科室管理"
+                   :tab-list="tabList"
+                   :active-tab-key="key"
+                   @tabChange="key => onTabChange(key, 'key')"
+           >
+               <template #info="item">
+                   <span><home-outlined/>{{ item.key }}</span>
+               </template>
+               <template #person="item">
+                   <span><user-outlined/>{{ item.key }}</span>
+               </template>
+               {{ contentList[key] }}
+           </a-card>
+       </div>
+    </div>
 </template>
-
 <script>
-import { defineComponent, onMounted } from 'vue';
+    import {HomeOutlined, UserOutlined} from '@ant-design/icons-vue';
+    const data = [
+        'Racing car sprays burning fuel into crowd.',
+        'Japanese princess to wed commoner.',
+        'Australian walks 100km after outback crash.',
+        'Man charged over missing wedding girl.',
+        'Los Angeles battles huge wildfires.',
+    ];
+    export default {
+        name: 'vtour',
+        components: {
+            HomeOutlined,
+            UserOutlined,
+        },
+        data() {
+            return {
+                data,
+                tabList: [
+                    {
+                        key: '科室信息',
+                        // tab: 'tab1',
+                        // scopedSlots: {tab: 'customRender'},
+                        slots: {tab: 'info'},
+                    },
 
-export default defineComponent({
-  setup() {
-    onMounted(async () => {});
-  }
-});
+                    {
+                        key: '科室负责人',
+                        // tab: 'tab2',
+                        slots: {tab: 'person'}
+                    },
+
+                ],
+                contentList: {
+                    tab1: 'content1',
+                    tab2: 'content2',
+                },
+                tabListNoTitle: [
+                    {
+                        key: 'article',
+                        tab: 'article',
+                    },
+                    {
+                        key: 'app',
+                        tab: 'app',
+                    },
+                    {
+                        key: 'project',
+                        tab: 'project',
+                    },
+                ],
+                // key: 'tab1',
+                // noTitleKey: 'app',
+            };
+        },
+        mounted() {
+            embedpano({
+                swf: "./static/vtour/tour.swf",
+                xml: "./static/vtour/tour.xml",
+                target: "pano",
+                html5: "auto",
+                mobilescale: 1.0,
+                passQueryParameters: true
+            });
+        },
+        methods: {
+            getorder(msg) {
+                this.show = msg
+            },
+            onTabChange(key, type) {
+                console.log(key, type);
+                this[type] = key;
+            },
+        }
+    }
 </script>
+<style scoped>
+    #wrapper {
+        width: 100%;
+        /*display: flex;*/
+        /*justify-content: center;*/
+    }
 
-<style lang="less" scoped></style>
+    #pano {
+        margin-top: 20px;
+        width: 80%;
+        height: 505px;
+        display: flex;
+        justify-content: center;
+    }
+    #department-info {
+        flex-direction: row;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #info-card {
+        margin-top: 20px;
+        width: 65%;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    #slide {
+        margin-top: 20px;
+        width: 15%;
+    }
+
+</style>
+
