@@ -32,6 +32,7 @@
 
           <a-tabs defaultActiveKey="1" size="large">
             <a-tab-pane key="0" tab="" disabled></a-tab-pane>
+            <!--阶段1-->
             <a-tab-pane key="1" tab="接诊">
               <a-form-item name="consultation" label="描述">
                 <a-textarea
@@ -41,31 +42,9 @@
                 />
               </a-form-item>
               <a-form-item name="image" label="图片">
-                <a-upload
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    list-type="picture-card"
-                    v-model:file-list="imageList"
-                    @preview="handlePreview"
-                >
-                  <div v-if="imageList.length < 8">
-                    <plus-outlined />
-                    <div class="ant-upload-text">Upload</div>
-                  </div>
-                </a-upload>
-                <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
-                  <img alt="example" style="width: 100%" :src="previewImage" />
-                </a-modal>
 
-<!--                <a-upload-->
-<!--                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"-->
-<!--                    list-type="picture"-->
-<!--                    v-model:file-list="imageList"-->
-<!--                >-->
-<!--                  <a-button>-->
-<!--                    <upload-outlined></upload-outlined>-->
-<!--                    upload-->
-<!--                  </a-button>-->
-<!--                </a-upload>-->
+                <img-upload :procedure="'consultation'" @change="handleChange"></img-upload>
+
               </a-form-item>
 
               <a-form-item name="video" label="视频">
@@ -84,6 +63,7 @@
 
             </a-tab-pane>
 
+            <!--阶段2-->
             <a-tab-pane key="2" tab="病例检查" force-render>
               <a-form-item name="examination" label="描述">
                 <a-textarea
@@ -119,6 +99,7 @@
                 </a-upload>
               </a-form-item>
             </a-tab-pane>
+            <!--阶段3-->
             <a-tab-pane key="3" tab="诊断结果">
               <a-form-item name="diagnosis" label="描述">
                 <a-textarea
@@ -154,6 +135,7 @@
                 </a-upload>
               </a-form-item>
             </a-tab-pane>
+            <!--阶段4-->
             <a-tab-pane key="4" tab="治疗方案">
               <a-form-item name="treatment" label="描述">
                 <a-textarea
@@ -208,36 +190,25 @@
 <script>
 import {defineComponent, reactive, ref} from "vue";
 import {PlusOutlined, UploadOutlined} from '@ant-design/icons-vue';
-import useUserStore from "@/hooks/useUserStore";
 import {useRouter} from "vue-router";
 import axios from "@/utils/axios";
 import {message} from "ant-design-vue";
 import AdminMenu from "@/components/Header/AdminMenu";
+import qs from 'qs';
+import ImgUpload from "@/components/file/ImgUpload";
 
-function getBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
-}
+
 
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 18 }
 };
 export default defineComponent({
-  components: {AdminMenu, UploadOutlined, PlusOutlined},
+  components: {ImgUpload, AdminMenu, UploadOutlined, PlusOutlined},
   data() {
     return {
-      paperList: [
-        {"id": 1, "name": "试卷一"},
-      ],
       options: [],
       diseaseId: [],
-      imageList: [],
-      videoList: [],
     }
   },
   methods: {
@@ -245,21 +216,54 @@ export default defineComponent({
       this.formState.disease_id = this.diseaseId[1];
     },
 
+    handleChange(fileList, procedure) {
+      switch (procedure) {
+        case 'consultation':
+          this.list.imageList1 = fileList;
+          break;
+        case 'examination':
+          this.list.imageList2 = fileList;
+          break;
+        case 'diagnosis':
+          this.list.imageList3 = fileList;
+          break;
+        case 'treatment':
+          this.list.imageList4 = fileList;
+          break;
+      }
+    },
   },
   created() {
     this.options = JSON.parse(localStorage.getItem('diseaseOptions'));
+
   },
-  setup(props, ctx) {
+  setup() {
     const router = useRouter();
+    const state = reactive({
+      image: [],
+      video: [],
+      imageProcedure: [],
+      videoProcedure: [],
+    });
+    const list = reactive({
+      imageList1: [],
+      videoList1: [],
+      imageList2: [],
+      videoList2: [],
+      imageList3: [],
+      videoList3: [],
+      imageList4: [],
+      videoList4: [],
+    });
 
     const formRef = ref();
     const formState = reactive({
       name: '',
       disease_id: '',
-      consultation: '',
-      examination: '',
-      diagnosis: '',
-      treatment: '',
+      consultation: '暂无描述',
+      examination: '暂无描述',
+      diagnosis: '暂无描述',
+      treatment: '暂无描述',
     });
     const rules = {
       name: [{ required: true, message: '请输入病例名称', trigger: 'change' }],
@@ -271,32 +275,31 @@ export default defineComponent({
             return Promise.resolve();
           }
         }, trigger: 'change' }],
-    };
-
-    const previewVisible = ref(false);
-    const previewImage = ref('');
-    const handleCancel = () => {
-      previewVisible.value = false;
-    };
-    const handlePreview = async file => {
-      if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj);
-      }
-
-      previewImage.value = file.url || file.preview;
-      previewVisible.value = true;
-    };
-
-    const handleChange = ({ fileList: newFileList }) => {
-      ctx.imageList = newFileList;
+      consultation: [{ required: true, message: '请输入接诊描述', trigger: 'change' }],
+      examination: [{ required: true, message: '请输入病例检查描述', trigger: 'change' }],
+      diagnosis: [{ required: true, message: '请输入诊断结果描述', trigger: 'change' }],
+      treatment: [{ required: true, message: '请输入治疗方案描述', trigger: 'change' }],
     };
 
     const onSubmit = () => {
+
       formRef.value
           .validate()
           .then(() => {
-            axios.post('/test/createTest', formState).then(res => {
-              message.success(`创建考试成功！`);
+            // beforeSubmit();
+            let formData = new FormData();
+            formData.append('name', formState.name);
+            formData.append('disease_id', formState.disease_id);
+            formData.append('consultation', formState.consultation);
+            formData.append('examination', formState.examination);
+            formData.append('diagnosis', formState.diagnosis);
+
+            axios.post('/case/create', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              }
+            }).then(res => {
+              message.success(`创建病例成功！`);
               router.go(-1);
             });
           })
@@ -304,17 +307,54 @@ export default defineComponent({
             console.log('error', error);
           });
     };
+    const beforeSubmit = () => {
+      state.image.length = 0;
+      state.video.length = 0;
+      state.imageProcedure.length = 0;
+      state.videoProcedure.length = 0;
+      state.image.push(...list.imageList1);
+      for (let i = 0; i < list.imageList1.length; i++) {
+        state.imageProcedure.push('consultation');
+      }
+      state.image.push(...list.imageList2);
+      for (let i = 0; i < list.imageList2.length; i++) {
+        state.imageProcedure.push('examination');
+      }
+      state.image.push(...list.imageList3);
+      for (let i = 0; i < list.imageList3.length; i++) {
+        state.imageProcedure.push('diagnosis');
+      }
+      state.image.push(...list.imageList4);
+      for (let i = 0; i < list.imageList4.length; i++) {
+        state.imageProcedure.push('treatment');
+      }
+      state.video.push(...list.videoList1);
+      for (let i = 0; i < list.videoList1.length; i++) {
+        state.videoProcedure.push('consultation');
+      }
+      state.video.push(...list.videoList2);
+      for (let i = 0; i < list.videoList2.length; i++) {
+        state.videoProcedure.push('examination');
+      }
+      state.video.push(...list.videoList3);
+      for (let i = 0; i < list.videoList3.length; i++) {
+        state.videoProcedure.push('diagnosis');
+      }
+      state.video.push(...list.videoList4);
+      for (let i = 0; i < list.videoList4.length; i++) {
+        state.videoProcedure.push('treatment');
+      }
+      console.log(state);
+    };
     return {
       layout,
+      state,
+      list,
       formRef,
       rules,
       formState,
-      previewVisible,
-      previewImage,
-      handleCancel,
-      handlePreview,
-      handleChange,
       onSubmit,
+      beforeSubmit,
     };
   }
 });

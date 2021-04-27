@@ -67,7 +67,7 @@ const routes = [
     component: () => import('../views/admin/case/index.vue'),
   },
   {
-    path: '/case/details',
+    path: '/case/detail',
     name: 'caseDetail',
     component: () => import('../views/admin/case/detail.vue')
   },

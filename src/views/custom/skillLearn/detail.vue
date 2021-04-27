@@ -1,19 +1,29 @@
 <template>
-  <div>
-    <a-card style="margin: 20px auto; width: 80%">
-      <h2>
-        {{ state.mapList[index].title }}
-      </h2>
-      <div>
-        {{ state.mapList[index].content }}
-      </div>
-    </a-card>
-  </div>
+  <a-layout style="min-height: 91%">
+    <a-layout-content style="padding: 0 50px">
+      <a-page-header
+          style="padding: 20px 100px 0 60px"
+          :breadcrumb="{ routes }"
+      ></a-page-header>
+
+      <a-card style="margin: 20px auto; width: 90%">
+        <h2 style="font-weight: bold">
+          {{ state.mapList[index].title }}
+        </h2>
+        <div>
+          {{ state.mapList[index].content }}
+        </div>
+      </a-card>
+
+    </a-layout-content>
+  </a-layout>
+
 </template>
 
 <script>
 import { defineComponent, onMounted, reactive } from 'vue';
 import { useRoute } from 'vue-router';
+const video1 = require('../../../assets/VTS_023.mp4');
 
 export default defineComponent({
 
@@ -23,23 +33,22 @@ export default defineComponent({
       mapList: [
         {
           title: '前台学习',
-          content: ` 
-          前台职责:建立并管理病历档案;接听来电、安排预约、售后通知、提醒疫苗客户、回访会员客户等;核查患病
-          动物入院、出院等手续是否完整;接待客户并引领服务;保持前台、接待区域的舒适、整洁和安全防范工作;以
-          专业的知识和热情的态度接听电话并处理相关事宜;维持前台区域的工作秩序;合理应用医院电脑软件程序,对
-          前台的办公设备进行保养等。
-          每天工作流程:
-          (1)营业前:提醒员工打卡，并做好监督;检查员工服务仪容;前台工作区域的卫生清洁等。
-          (2)营业中:检查《客户回访登记表》、《来电登记表》 、《预约登记表》 ;向院长提供需要回访的客户资
-          料，以便院长安排回访工作;客户接待、服务引领和现场销售活动等;接听电话、 安排预约、售后通知等,客户
-          回访和邀约工作;收银现金的对账，确保物、 账对应;核查患病动物入院、出院等手续是否完整及准备好各种手
-          续所需的物料:客户意见调查，了 解客户感受,对医院的评价，以及客户对医院有什么合理建议等;维持前台形
-          象，保持环境清洁卫生并填写《巡查登记》;客户资料更新和分析;向院长汇报销售情况、市场活动、客户管理
-          及工作中遇上的重大情况:提升工作技能，学习产品知识，牢记每位宠物的信息。
-          (3)下班前:做好各项工作报表，检查单据填写是否完善、规范;检查当天的客户资料、核对营业额，并对
-          单、交账;总结当天的业绩、工作与计划的差距:检查工作范围内的货品、电源设施等情况;及时记录当天未处
-          理的事项,做好交班工作(填写交接表并当面交接)。
-        `
+          content: '前台职责:建立并管理病历档案;接听来电、安排预约、售后通知、提醒疫苗客户、回访会员客户等;核查患病\n' +
+              '          动物入院、出院等手续是否完整;接待客户并引领服务;保持前台、接待区域的舒适、整洁和安全防范工作;以\n' +
+              '          专业的知识和热情的态度接听电话并处理相关事宜;维持前台区域的工作秩序;合理应用医院电脑软件程序,对\n' +
+              '          前台的办公设备进行保养等。\n' +
+              '          每天工作流程:\n' +
+              '          (1)营业前:提醒员工打卡，并做好监督;检查员工服务仪容;前台工作区域的卫生清洁等。\n' +
+              '          (2)营业中:检查《客户回访登记表》、《来电登记表》 、《预约登记表》 ;向院长提供需要回访的客户资\n' +
+              '          料，以便院长安排回访工作;客户接待、服务引领和现场销售活动等;接听电话、 安排预约、售后通知等,客户\n' +
+              '          回访和邀约工作;收银现金的对账，确保物、 账对应;核查患病动物入院、出院等手续是否完整及准备好各种手\n' +
+              '          续所需的物料:客户意见调查，了 解客户感受,对医院的评价，以及客户对医院有什么合理建议等;维持前台形\n' +
+              '          象，保持环境清洁卫生并填写《巡查登记》;客户资料更新和分析;向院长汇报销售情况、市场活动、客户管理\n' +
+              '          及工作中遇上的重大情况:提升工作技能，学习产品知识，牢记每位宠物的信息。\n' +
+              '          (3)下班前:做好各项工作报表，检查单据填写是否完善、规范;检查当天的客户资料、核对营业额，并对\n' +
+              '          单、交账;总结当天的业绩、工作与计划的差距:检查工作范围内的货品、电源设施等情况;及时记录当天未处\n' +
+              '          理的事项,做好交班工作(填写交接表并当面交接)。'
+
         },
         {
           title: '医师学习',
@@ -75,10 +84,19 @@ export default defineComponent({
        
       `
     });
-
+    const routes = reactive([
+      {
+        path: '/skill-learn',
+        breadcrumbName: '职能学习',
+      },
+      {
+        path: '/detail',
+        breadcrumbName: state.mapList[route.query.role].title,
+      }
+    ]);
     onMounted(async () => {});
 
-    return { state, index: route.query.role };
+    return { state, index: route.query.role, routes };
   }
 });
 </script>
