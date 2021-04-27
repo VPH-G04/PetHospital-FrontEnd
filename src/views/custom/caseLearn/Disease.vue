@@ -9,7 +9,7 @@
 
       <a-row type="flex" justify="center" style="margin: 20px 10px; min-width: 1050px">
         <a-col style="min-width: 800px;max-width: 1000px">
-          <a-card style="margin: 0 50px 50px 20px;opacity: 0.9;box-shadow: 2px 2px 10px #888888;">
+          <a-card style="margin: 0 50px 50px 20px;opacity: 1;box-shadow: 2px 2px 10px #888888;">
 
               <div v-for="(item, i) in classification" :id="'disease-'+i">
                 <h2> {{item.name}}</h2>

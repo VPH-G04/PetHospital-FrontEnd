@@ -48,17 +48,7 @@
               </a-form-item>
 
               <a-form-item name="video" label="视频">
-                <a-upload
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    :multiple="true"
-                    :file-list="videoList"
-                    @change="handleChange"
-                >
-                  <a-button>
-                    <upload-outlined></upload-outlined>
-                    Upload
-                  </a-button>
-                </a-upload>
+                <video-upload :procedure="'consultation'" @change="handleVideoChange"></video-upload>
               </a-form-item>
 
             </a-tab-pane>
@@ -73,30 +63,11 @@
                 />
               </a-form-item>
               <a-form-item name="image" label="图片">
-                <a-upload
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    list-type="picture"
-                    v-model:file-list="imageList"
-                >
-                  <a-button>
-                    <upload-outlined></upload-outlined>
-                    upload
-                  </a-button>
-                </a-upload>
+                <img-upload :procedure="'examination'" @change="handleChange"></img-upload>
               </a-form-item>
 
               <a-form-item name="video" label="视频">
-                <a-upload
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    :multiple="true"
-                    :file-list="videoList"
-                    @change="handleChange"
-                >
-                  <a-button>
-                    <upload-outlined></upload-outlined>
-                    Upload
-                  </a-button>
-                </a-upload>
+                <video-upload :procedure="'examination'" @change="handleVideoChange"></video-upload>
               </a-form-item>
             </a-tab-pane>
             <!--阶段3-->
@@ -109,30 +80,11 @@
                 />
               </a-form-item>
               <a-form-item name="image" label="图片">
-                <a-upload
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    list-type="picture"
-                    v-model:file-list="imageList"
-                >
-                  <a-button>
-                    <upload-outlined></upload-outlined>
-                    upload
-                  </a-button>
-                </a-upload>
+                <img-upload :procedure="'diagnosis'" @change="handleChange"></img-upload>
               </a-form-item>
 
               <a-form-item name="video" label="视频">
-                <a-upload
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    :multiple="true"
-                    :file-list="videoList"
-                    @change="handleChange"
-                >
-                  <a-button>
-                    <upload-outlined></upload-outlined>
-                    Upload
-                  </a-button>
-                </a-upload>
+                <video-upload :procedure="'diagnosis'" @change="handleVideoChange"></video-upload>
               </a-form-item>
             </a-tab-pane>
             <!--阶段4-->
@@ -145,30 +97,11 @@
                 />
               </a-form-item>
               <a-form-item name="image" label="图片">
-                <a-upload
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    list-type="picture"
-                    v-model:file-list="imageList"
-                >
-                  <a-button>
-                    <upload-outlined></upload-outlined>
-                    upload
-                  </a-button>
-                </a-upload>
+                <img-upload :procedure="'treatment'" @change="handleChange"></img-upload>
               </a-form-item>
 
               <a-form-item name="video" label="视频">
-                <a-upload
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                    :multiple="true"
-                    :file-list="videoList"
-                    @change="handleChange"
-                >
-                  <a-button>
-                    <upload-outlined></upload-outlined>
-                    Upload
-                  </a-button>
-                </a-upload>
+                <video-upload :procedure="'treatment'" @change="handleVideoChange"></video-upload>
               </a-form-item>
             </a-tab-pane>
           </a-tabs>
@@ -196,6 +129,7 @@ import {message} from "ant-design-vue";
 import AdminMenu from "@/components/Header/AdminMenu";
 import qs from 'qs';
 import ImgUpload from "@/components/file/ImgUpload";
+import VideoUpload from "@/components/file/videoUpload";
 
 
 
@@ -204,7 +138,7 @@ const layout = {
   wrapperCol: { span: 18 }
 };
 export default defineComponent({
-  components: {ImgUpload, AdminMenu, UploadOutlined, PlusOutlined},
+  components: {VideoUpload, ImgUpload, AdminMenu, UploadOutlined, PlusOutlined},
   data() {
     return {
       options: [],
@@ -232,6 +166,22 @@ export default defineComponent({
           break;
       }
     },
+    handleVideoChange(fileList, procedure) {
+      switch (procedure) {
+        case 'consultation':
+          this.list.videoList1 = fileList;
+          break;
+        case 'examination':
+          this.list.videoList2 = fileList;
+          break;
+        case 'diagnosis':
+          this.list.videoList3 = fileList;
+          break;
+        case 'treatment':
+          this.list.videoList4 = fileList;
+          break;
+      }
+    }
   },
   created() {
     this.options = JSON.parse(localStorage.getItem('diseaseOptions'));
@@ -286,19 +236,29 @@ export default defineComponent({
       formRef.value
           .validate()
           .then(() => {
-            // beforeSubmit();
+            beforeSubmit();
             let formData = new FormData();
             formData.append('name', formState.name);
             formData.append('disease_id', formState.disease_id);
             formData.append('consultation', formState.consultation);
             formData.append('examination', formState.examination);
             formData.append('diagnosis', formState.diagnosis);
-
-            axios.post('/case/create', formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              }
-            }).then(res => {
+            formData.append('treatment', formState.treatment);
+            state.image.forEach(file => {
+              formData.append('image', file);
+            })
+            state.imageProcedure.forEach(string => {
+              formData.append('imageProcedure', string);
+              formData.append('imageDescription', ' ');
+            })
+            state.video.forEach(file => {
+              formData.append('video', file);
+            })
+            state.videoProcedure.forEach(string => {
+              formData.append('videoProcedure', string);
+              formData.append('videoDescription', ' ');
+            })
+            axios.post('/case/create2', formData).then(res => {
               message.success(`创建病例成功！`);
               router.go(-1);
             });
@@ -312,39 +272,42 @@ export default defineComponent({
       state.video.length = 0;
       state.imageProcedure.length = 0;
       state.videoProcedure.length = 0;
-      state.image.push(...list.imageList1);
-      for (let i = 0; i < list.imageList1.length; i++) {
+
+      list.imageList1.forEach(item => {
+        state.image.push(item.response.data);
         state.imageProcedure.push('consultation');
-      }
-      state.image.push(...list.imageList2);
-      for (let i = 0; i < list.imageList2.length; i++) {
+      })
+      list.imageList2.forEach(item => {
+        state.image.push(item.response.data);
         state.imageProcedure.push('examination');
-      }
-      state.image.push(...list.imageList3);
-      for (let i = 0; i < list.imageList3.length; i++) {
+      })
+      list.imageList3.forEach(item => {
+        state.image.push(item.response.data);
         state.imageProcedure.push('diagnosis');
-      }
-      state.image.push(...list.imageList4);
-      for (let i = 0; i < list.imageList4.length; i++) {
+      })
+      list.imageList4.forEach(item => {
+        state.image.push(item.response.data);
         state.imageProcedure.push('treatment');
-      }
-      state.video.push(...list.videoList1);
-      for (let i = 0; i < list.videoList1.length; i++) {
+      })
+
+      list.videoList1.forEach(item => {
+        state.video.push(item.response.data);
         state.videoProcedure.push('consultation');
-      }
-      state.video.push(...list.videoList2);
-      for (let i = 0; i < list.videoList2.length; i++) {
+      })
+      list.videoList2.forEach(item => {
+        state.video.push(item.response.data);
         state.videoProcedure.push('examination');
-      }
-      state.video.push(...list.videoList3);
-      for (let i = 0; i < list.videoList3.length; i++) {
+      })
+      list.videoList3.forEach(item => {
+        state.video.push(item.response.data);
         state.videoProcedure.push('diagnosis');
-      }
-      state.video.push(...list.videoList4);
-      for (let i = 0; i < list.videoList4.length; i++) {
+      })
+      list.videoList4.forEach(item => {
+        state.video.push(item.response.data);
         state.videoProcedure.push('treatment');
-      }
-      console.log(state);
+      })
+
+
     };
     return {
       layout,

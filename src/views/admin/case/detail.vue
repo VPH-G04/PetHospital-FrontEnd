@@ -13,24 +13,70 @@
           <a-collapse v-model:activeKey="activeKey">
             <a-collapse-panel key="1" header="接诊">
               <a-spin :spinning="loading" tip="Loading...">
-                {{ caseVO.procedureVOS }}
+
+                <p>{{ consultation.describe }}</p>
+
+                <div v-for="(item, i) in consultation.images"  style="text-align: center; margin: 20px">
+                  <a-image :src="item.url"/><br>
+                  <span>{{ item.description }}</span>
+                </div>
+                <div v-for="(item, i) in consultation.videos"  style="text-align: center; margin: 20px">
+                  <video :src="item.url" :controls="{controls: true}"></video><br>
+                  <span>{{ item.description }}</span>
+                </div>
+
               </a-spin>
             </a-collapse-panel>
             <a-collapse-panel key="2" header="病例检查">
-              <a-image v-if="examination.images.length" :src="examination.images.length ? examination.images[0].url : ''"></a-image>
-              <p> {{ examination.describe }}</p>
-              <video
-                  v-if="examination.videos.length" :src="examination.videos.length ? examination.videos[0] : ''">
-              </video>
+              <a-spin :spinning="loading" tip="Loading...">
+
+                <p>{{ examination.describe }}</p>
+
+                <div v-for="(item, i) in examination.images"  style="text-align: center; margin: 20px">
+                  <a-image :src="item.url"/><br>
+                  <span>{{ item.description }}</span>
+                </div>
+                <div v-for="(item, i) in examination.videos"  style="text-align: center; margin: 20px">
+                  <video :src="item.url" :controls="{controls: true}"></video><br>
+                  <span>{{ item.description }}</span>
+                </div>
+
+              </a-spin>
             </a-collapse-panel>
             <a-collapse-panel key="3" header="诊断结果">
+              <a-spin :spinning="loading" tip="Loading...">
 
+                <p>{{ diagnosis.describe }}</p>
+
+                <div v-for="(item, i) in diagnosis.images"  style="text-align: center; margin: 20px">
+                  <a-image :src="item.url"/><br>
+                  <span>{{ item.description }}</span>
+                </div>
+                <div v-for="(item, i) in diagnosis.videos"  style="text-align: center; margin: 20px">
+                  <video :src="item.url" :controls="{controls: true}"></video><br>
+                  <span>{{ item.description }}</span>
+                </div>
+
+              </a-spin>
             </a-collapse-panel>
             <a-collapse-panel key="4" header="治疗方案">
+              <a-spin :spinning="loading" tip="Loading...">
 
+                <p>{{ treatment.describe }}</p>
+
+                <div v-for="(item, i) in treatment.images"  style="text-align: center; margin: 20px">
+                  <a-image :src="item.url"/><br>
+                  <span>{{ item.description }}</span>
+                </div>
+                <div v-for="(item, i) in treatment.videos"  style="text-align: center; margin: 20px">
+                  <video :src="item.url" :controls="{controls: true}"></video><br>
+                  <span>{{ item.description }}</span>
+                </div>
+
+              </a-spin>
             </a-collapse-panel>
           </a-collapse>
-
+          <br><br>
         </div>
       </div>
     </a-layout-content>
